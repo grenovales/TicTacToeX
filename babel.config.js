@@ -1,28 +1,34 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache(true);
   return {
-    presets: ['babel-preset-expo'],
+    presets: [
+      ["babel-preset-expo", { jsxImportSource: "nativewind" }],
+      "nativewind/babel",
+    ],
     plugins: [
       [
-        'module-resolver',
+        "module-resolver",
         {
-          root: ['./'],
+          root: ["./"],
           alias: {
-            '@': './src',
-            '@components': './src/components',
-            '@assets': './assets'
+            "@": "./src",
+            "@components": "./src/components",
+            "@assets": "./assets",
+            "@styles": "./src/styles",
+            "@lib": "./src/lib",
+            "@app": "./src/app",
           },
           extensions: [
-            '.ios.js',
-            '.android.js',
-            '.js',
-            '.jsx',
-            '.ts',
-            '.tsx',
-            '.json',
-          ]
-        }
-      ]
-    ]
+            ".ios.js",
+            ".android.js",
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx",
+            ".json",
+          ],
+        },
+      ],
+    ],
   };
-}; 
+};
