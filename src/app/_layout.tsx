@@ -7,6 +7,9 @@ import { Theme, ThemeProvider, DefaultTheme, DarkTheme } from '@react-navigation
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { NAV_THEME } from '@lib/constants';
+import { TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -23,12 +26,46 @@ ErrorBoundary,
 } from 'expo-router';
 
 export default function RootLayout() {
- 
+  const router = useRouter();
 
   return (
     <ThemeProvider value={LIGHT_THEME}>
       <StatusBar style={'light'} />
-      <Stack />
+      <Stack
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#f5f5f5',
+          },
+          headerTintColor: '#333',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => router.push('/settings')}
+              className="mr-4"
+              accessibilityLabel="Settings"
+              accessibilityRole="button"
+            >
+              <Ionicons name="settings-outline" size={24} color="#333" />
+            </TouchableOpacity>
+          ),
+        }}
+      >
+        <Stack.Screen
+          name="index"
+          options={{
+            title: 'TicTacToeX',
+          }}
+        />
+        <Stack.Screen
+          name="settings"
+          options={{
+            title: 'Settings',
+            presentation: 'modal',
+          }}
+        />
+      </Stack>
     </ThemeProvider>
   );
 }
