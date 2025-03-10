@@ -1,7 +1,7 @@
 /**
  * TicTacToe remote multiplayer adapter using PartyKit
  */
-
+import { WebSocket } from "partysocket";
 import { GameAction, GameState, Move, Player } from './types';
 
 // Define the message types for PartyKit communication
@@ -173,6 +173,8 @@ export class TicTacToeRemoteAdapter {
         this.onStateChange(message.state);
         break;
       case 'JOIN_GAME':
+        //this.onPlayersChange(message.players);
+        break;
       case 'LEAVE_GAME':
         // The server will send a SYNC_STATE message with the updated players
         break;
@@ -213,157 +215,3 @@ export class TicTacToeRemoteAdapter {
     });
   }
 }
-
-/**
- * This is a placeholder for the PartyKit server implementation.
- * In a real implementation, you would create a separate PartyKit project.
- * 
- * Here's a sketch of what the PartyKit server implementation might look like:
- * 
- * ```typescript
- * import { Party } from "partykit/server";
- * import { GameAction, GameState, PartyMessage, PartyState } from "./types";
- * import { createTicTacToeEngine } from "./engine";
- * 
- * export default class TicTacToeParty implements Party {
- *   private state: PartyState = {
- *     gameState: createTicTacToeEngine().getState(),
- *     players: {},
- *     chatHistory: []
- *   };
- *   
- *   private engine = createTicTacToeEngine();
- *   
- *   constructor(readonly room: Party.Room) {
- *     // Initialize the game engine
- *     this.engine.subscribe((state) => {
- *       this.state.gameState = state;
- *       this.broadcastState();
- *     });
- *   }
- *   
- *   onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
- *     // Send the current state to the new connection
- *     conn.send(JSON.stringify({
- *       type: 'SYNC_STATE',
- *       state: this.state.gameState
- *     }));
- *   }
- *   
- *   onMessage(message: string, sender: Party.Connection) {
- *     try {
- *       const parsedMessage = JSON.parse(message) as PartyMessage;
- *       this.handleMessage(parsedMessage, sender);
- *     } catch (error) {
- *       console.error('Error parsing message:', error);
- *     }
- *   }
- *   
- *   private handleMessage(message: PartyMessage, sender: Party.Connection) {
- *     switch (message.type) {
- *       case 'JOIN_GAME':
- *         this.handleJoinGame(message, sender);
- *         break;
- *       case 'LEAVE_GAME':
- *         this.handleLeaveGame(message);
- *         break;
- *       case 'GAME_ACTION':
- *         this.handleGameAction(message);
- *         break;
- *       case 'CHAT_MESSAGE':
- *         this.handleChatMessage(message);
- *         break;
- *     }
- *   }
- *   
- *   private handleJoinGame(message: Extract<PartyMessage, { type: 'JOIN_GAME' }>, conn: Party.Connection) {
- *     // Add the player to the game
- *     this.state.players[message.playerId] = {
- *       name: message.playerName,
- *       role: this.assignPlayerRole(message.playerId),
- *       connected: true,
- *       lastActivity: Date.now()
- *     };
- *     
- *     // Broadcast the updated state
- *     this.broadcastState();
- *   }
- *   
- *   private handleLeaveGame(message: Extract<PartyMessage, { type: 'LEAVE_GAME' }>) {
- *     // Mark the player as disconnected
- *     if (this.state.players[message.playerId]) {
- *       this.state.players[message.playerId].connected = false;
- *     }
- *     
- *     // Broadcast the updated state
- *     this.broadcastState();
- *   }
- *   
- *   private handleGameAction(message: Extract<PartyMessage, { type: 'GAME_ACTION' }>) {
- *     // Check if the player is allowed to make this action
- *     const player = this.state.players[message.playerId];
- *     if (!player || !player.connected) {
- *       return;
- *     }
- *     
- *     // Check if it's the player's turn
- *     if (
- *       message.action.type === 'MAKE_MOVE' &&
- *       player.role !== this.state.gameState.currentPlayer
- *     ) {
- *       return;
- *     }
- *     
- *     // Dispatch the action to the game engine
- *     this.engine.dispatch(message.action);
- *     
- *     // Update the player's last activity
- *     player.lastActivity = Date.now();
- *   }
- *   
- *   private handleChatMessage(message: Extract<PartyMessage, { type: 'CHAT_MESSAGE' }>) {
- *     // Add the message to the chat history
- *     this.state.chatHistory.push({
- *       message: message.message,
- *       playerId: message.playerId,
- *       playerName: message.playerName,
- *       timestamp: Date.now()
- *     });
- *     
- *     // Limit the chat history to the last 100 messages
- *     if (this.state.chatHistory.length > 100) {
- *       this.state.chatHistory = this.state.chatHistory.slice(-100);
- *     }
- *     
- *     // Broadcast the chat message
- *     this.room.broadcast(JSON.stringify(message));
- *   }
- *   
- *   private assignPlayerRole(playerId: string): Player {
- *     // Count the number of players with each role
- *     const roles = Object.values(this.state.players).reduce(
- *       (acc, player) => {
- *         if (player.role === 'X') acc.X++;
- *         else if (player.role === 'O') acc.O++;
- *         return acc;
- *       },
- *       { X: 0, O: 0 }
- *     );
- *     
- *     // Assign the role with the fewest players
- *     if (roles.X <= roles.O) {
- *       return 'X';
- *     } else {
- *       return 'O';
- *     }
- *   }
- *   
- *   private broadcastState() {
- *     this.room.broadcast(JSON.stringify({
- *       type: 'SYNC_STATE',
- *       state: this.state.gameState
- *     }));
- *   }
- * }
- * ```
- */ 
