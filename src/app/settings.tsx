@@ -2,7 +2,7 @@
  * Settings screen for TicTacToe
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, SafeAreaView, ScrollView } from 'react-native';
 import { Text } from '@components/ui/text';
 import { Button } from '@components/ui/button';
@@ -13,13 +13,18 @@ import { useGameSettings } from '@lib/hooks/useGameSettings';
 export default function Settings() {
   const router = useRouter();
   const { 
-    boardSize, 
+    boardSize: savedBoardSize, 
     setBoardSize, 
-    gameMode, 
+    gameMode: savedGameMode, 
     setGameMode, 
-    difficulty, 
+    difficulty: savedDifficulty, 
     setDifficulty 
   } = useGameSettings();
+
+  // Create local state for temporary settings
+  const [tempBoardSize, setTempBoardSize] = useState(savedBoardSize);
+  const [tempGameMode, setTempGameMode] = useState(savedGameMode);
+  const [tempDifficulty, setTempDifficulty] = useState(savedDifficulty);
 
   // Board size options
   const boardSizeOptions = [3, 4, 5, 6];
@@ -32,6 +37,10 @@ export default function Settings() {
 
   // Save settings and go back
   const handleSave = () => {
+    // Apply all settings at once when save is clicked
+    setBoardSize(tempBoardSize);
+    setGameMode(tempGameMode);
+    setDifficulty(tempDifficulty);
     router.back();
   };
 
@@ -50,9 +59,9 @@ export default function Settings() {
             {boardSizeOptions.map((size) => (
               <Button
                 key={`size-${size}`}
-                onPress={() => setBoardSize(size)}
-                className={`mr-2 mb-2 ${boardSize === size ? 'border-2' : ''}`}
-                variant={boardSize === size ? 'default' : 'outline'}
+                onPress={() => setTempBoardSize(size)}
+                className={`mr-2 mb-2 ${tempBoardSize === size ? 'border-2' : ''}`}
+                variant={tempBoardSize === size ? 'default' : 'outline'}
               >
                 <Text>{size}x{size}</Text>
               </Button>
@@ -67,27 +76,27 @@ export default function Settings() {
             {gameModeOptions.map((mode) => (
               <Button
                 key={`mode-${mode}`}
-                onPress={() => setGameMode(mode)}
-                className={`mr-2 mb-2 ${gameMode === mode ? 'border-2' : ''}`}
-                variant={gameMode === mode ? 'default' : 'outline'}
+                onPress={() => setTempGameMode(mode)}
+                className={`mr-2 mb-2 ${tempGameMode === mode ? 'border-2' : ''}`}
+                variant={tempGameMode === mode ? 'default' : 'outline'}
               >
-                <Text>{mode === 'single' ? 'vs AI' : 'vs Friend'}</Text>
+                <Text>{mode}</Text>
               </Button>
             ))}
           </View>
         </View>
         
         {/* Difficulty selector (only show if game mode is single player) */}
-        {gameMode === 'single' && (
+        {tempGameMode === 'single' && (
           <View className="mb-6">
             <Text className="text-xl font-bold mb-3">Difficulty</Text>
             <View className="flex-row flex-wrap">
               {difficultyOptions.map((option) => (
                 <Button
                   key={`difficulty-${option}`}
-                  onPress={() => setDifficulty(option)}
-                  className={`mr-2 mb-2 ${difficulty === option ? 'border-2' : ''}`}
-                  variant={difficulty === option ? 'default' : 'outline'}
+                  onPress={() => setTempDifficulty(option)}
+                  className={`mr-2 mb-2 ${tempDifficulty === option ? 'border-2' : ''}`}
+                  variant={tempDifficulty === option ? 'default' : 'outline'}
                 >
                   <Text>{option}</Text>
                 </Button>
@@ -95,6 +104,8 @@ export default function Settings() {
             </View>
           </View>
         )}
+
+        //Todo: Add room and name for partykit on is selected remote mode
 
         {/* Save button */}
         <Button 

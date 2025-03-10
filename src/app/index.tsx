@@ -14,8 +14,7 @@ export default function Home() {
         <View className="mb-6 items-center">
           <Text className="text-3xl font-bold mb-2">TicTacToeX</Text>
           <Text className="text-base text-gray-600 mb-4">A game of X's and O's</Text>
-        </View>
-        
+        </View>     
         <GameController />
       </ScrollView>
     </SafeAreaView>
