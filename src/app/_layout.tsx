@@ -15,10 +15,13 @@ const LIGHT_THEME: Theme = {
   ...DefaultTheme,
   colors: NAV_THEME.light,
 };
+
+//TODO: Add dark theme
+/*
 const DARK_THEME: Theme = {
   ...DarkTheme,
   colors: NAV_THEME.dark,
-};
+};*/
 
 export {
 // Catch any errors thrown by the Layout component.
@@ -62,17 +65,7 @@ export default function RootLayout() {
           name="settings"
           options={{
             title: 'Settings',
-            presentation: 'modal',
-            headerRight: Platform.OS === 'ios' ? () => (
-              <TouchableOpacity
-                onPress={() => router.back()}
-                className="mr-4"
-                accessibilityLabel="Back"
-                accessibilityRole="button"
-              >
-                <Ionicons name="close" size={24} color="#333" />
-              </TouchableOpacity>
-            ) : undefined,
+            presentation: 'modal'
           }}
         />
       </Stack>

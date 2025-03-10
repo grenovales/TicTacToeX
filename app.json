@@ -25,7 +25,8 @@
       "package": "com.anonymous.TicTacToeX"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/images/app-icon-web-favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router"
