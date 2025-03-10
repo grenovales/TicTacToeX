@@ -9,9 +9,13 @@ interface GameSettingsState {
   boardSize: number;
   gameMode: GameMode;
   difficulty: GameDifficulty;
+  nickname: string | null;
+  roomId: string | null;
   setBoardSize: (size: number) => void;
   setGameMode: (mode: GameMode) => void;
   setDifficulty: (difficulty: GameDifficulty) => void;
+  setNickname: (nickname: string) => void;
+  setRoomId: (roomId: string) => void;
 }
 
 // Create a Zustand store for game settings
@@ -21,9 +25,13 @@ export const useGameSettingsStore = create<GameSettingsState>()(
       boardSize: 3,
       gameMode: 'single',
       difficulty: 'unbeatable',
+      nickname: null,
+      roomId: null,
       setBoardSize: (size) => set({ boardSize: size }),
       setGameMode: (mode) => set({ gameMode: mode }),
       setDifficulty: (difficulty) => set({ difficulty }),
+      setNickname: (nickname) => set({ nickname }),
+      setRoomId: (roomId) => set({ roomId }),
     }),
     {
       name: 'tictactoe-settings',
@@ -42,9 +50,13 @@ export function useGameSettings() {
     boardSize,
     gameMode,
     difficulty,
+    nickname,
+    roomId,
     setBoardSize,
     setGameMode,
     setDifficulty,
+    setNickname,
+    setRoomId,
   } = useGameSettingsStore();
 
   return {
@@ -54,5 +66,9 @@ export function useGameSettings() {
     setGameMode,
     difficulty,
     setDifficulty,
+    nickname,
+    setNickname,
+    roomId,
+    setRoomId,
   };
 } 

@@ -1,7 +1,8 @@
 /**
  * TicTacToe remote multiplayer adapter using PartyKit
  */
-import { WebSocket } from "partysocket";
+import "partysocket/event-target-polyfill";
+import PartySocket from "partysocket";
 import { GameAction, GameState, Move, Player } from './types';
 
 // Define the message types for PartyKit communication
@@ -42,7 +43,7 @@ export type PartyState = {
  * This adapter provides the client-side interface to interact with the PartyKit server.
  */
 export class TicTacToeRemoteAdapter {
-  private ws: WebSocket | null = null;
+  private ws: PartySocket | null = null;
   private playerId: string;
   private playerName: string;
   private roomId: string;
@@ -75,9 +76,12 @@ export class TicTacToeRemoteAdapter {
   connect(): void {
     // In a real implementation, you would use your PartyKit server URL
     // For now, we'll use a placeholder URL
-    const url = `wss://your-partykit-server.com/party/${this.roomId}`;
-    
-    this.ws = new WebSocket(url);
+    //const url = `wss://your-partykit-server.com/party/${this.roomId}`;
+
+    this.ws = new PartySocket({
+      host: "http://192.168.2.143:1999",
+      room: this.roomId,
+    });   
     
     this.ws.onopen = () => {
       console.log('Connected to PartyKit server');

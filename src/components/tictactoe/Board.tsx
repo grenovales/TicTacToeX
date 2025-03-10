@@ -8,7 +8,7 @@ interface BoardProps {
   /**
    * The current game state
    */
-  gameState: GameState;
+  gameState: GameState | null;
   
   /**
    * Callback when a cell is pressed
@@ -93,17 +93,30 @@ export function Board({
 
   // Handle cell press
   const handleCellPress = (row: number, col: number) => {
-    if (!disabled && onCellPress && !gameState.board[row][col] && !gameState.isGameOver) {
+    if (!disabled && onCellPress && gameState?.board && 
+        gameState.board[row] && gameState.board[row][col] === null && 
+        !gameState.isGameOver) {
       onCellPress(row, col);
     }
   };
+
+  // If gameState or gameState.board is undefined, render an empty board
+  if (!gameState || !gameState.board) {
+    return (
+      <View className="w-full aspect-square max-w-[500px] self-center bg-gray-100">
+        <Text className="text-center p-4">Loading game board...</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="w-full aspect-square max-w-[500px] self-center">
       {indices.map(row => (
         <View key={`row-${row}`} className="flex-row flex-1">
           {indices.map(col => {
-            const value = gameState.board[row][col];
+            // Add null checks for gameState.board
+            const value = gameState.board && gameState.board[row] ? 
+              gameState.board[row][col] : null;
             const isWinning = isWinningCell(row, col, gameState.winningLine);
             const cellDisabled = disabled || !!value || gameState.isGameOver;
             
