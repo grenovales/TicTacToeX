@@ -36,4 +36,5 @@ The machine uses the minimax algorithm with alpha-beta pruning to find the best 
 Remote multiplayer is implemented using PartyKit, a serverless WebSocket platform. The client-side adapter handles connection management, message serialization, and reconnection logic. For PartyKit Server Code visit [TikTacToeX-Party](https://github.com/grenovales/TicTacToeX-Party)
 
 ## Future Improvements
+- Dark Theme support.
 - Tournaments? Leader Board?

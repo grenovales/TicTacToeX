@@ -1,7 +1,6 @@
 /**
  * Home screen
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, SafeAreaView, ScrollView } from 'react-native';
 import { Text } from '@components/ui/text';

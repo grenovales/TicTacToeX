@@ -1,4 +1,3 @@
-import { useState, useEffect, useCallback } from 'react';
 import { GameDifficulty, GameMode } from '@lib/tictactoe';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
