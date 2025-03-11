@@ -26,7 +26,7 @@ export default function Settings() {
   const [tempDifficulty, setTempDifficulty] = useState(savedDifficulty);
 
   // Board size options
-  const boardSizeOptions = [3, 4, 5, 6];
+  const boardSizeOptions = [3, 4, 5];
   
   // Difficulty options
   const difficultyOptions: GameDifficulty[] = ['easy', 'medium', 'hard', 'unbeatable'];
