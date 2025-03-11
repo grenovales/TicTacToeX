@@ -109,7 +109,7 @@ export default function Settings() {
         {/* Remote game settings (only show if game mode is remote) */}
         {tempGameMode === 'remote' && (
           <View className="mb-6">
-            <Text className="text-xl font-bold mb-3">Comming Soon!!!</Text>
+            <Text className="text-xl font-bold mb-3">Coming Soon!!!</Text>
             <Text className="text-base text-gray-600 mb-4">Remote game settings will be available soon</Text>
           </View>
         )}
