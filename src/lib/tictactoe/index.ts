@@ -19,7 +19,7 @@ export { TicTacToeRemoteAdapter } from './remote';
 
 // Re-export common utilities
 import { createTicTacToeEngine } from './engine';
-import { GameAction, GameDifficulty, GameMode, GameState, TicTacToeEngine } from './types';
+import { GameDifficulty, GameMode, GameState, TicTacToeEngine } from './types';
 
 /**
  * Create a new TicTacToe game with the specified options
