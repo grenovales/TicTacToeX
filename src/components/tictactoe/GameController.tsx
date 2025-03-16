@@ -162,21 +162,6 @@ export function GameController({
     }
   }, [gameMode, nickname, roomId, gameEngine, handlePlayersChange]);
   
-  // Sync remote actions
-  useEffect(() => {
-    if (gameMode === 'remote' && remoteAdapterRef.current) {
-      // Forward local actions to remote
-      const unsubscribe = gameEngine.subscribe((state) => {
-        // Only send if we're connected
-        if (remoteAdapterRef.current && connectionStatus === 'connected') {
-          // We don't need to send every state change, just when moves are made
-          // This is handled by the remote adapter's dispatchAction method
-        }
-      });
-      
-      return unsubscribe;
-    }
-  }, [gameMode, connectionStatus, gameEngine]);
   
   // Handle cell press
   const handleCellPress = (row: number, col: number) => {
