@@ -439,11 +439,23 @@ export function createTicTacToeEngine(
     if (availableMoves.length === 0) {
       return null;
     }
-    
-    // For easy difficulty, make random moves with occasional good moves
-    if (state.difficulty === 'easy') {
-      // 30% chance of making the best move, 70% chance of making a random move
-      if (Math.random() < 0.3) {
+
+    const difficulties = {
+      easy: {
+        bestMoveChance: 0.3, // 30% chance of making the best move
+      },
+      medium: {
+        bestMoveChance: 0.6, // 60% chance of making the best move
+      },
+      hard: {
+        bestMoveChance: 0.9, // 90% chance of making the best move
+      }
+    };
+
+    if (state.difficulty !== 'unbeatable') {
+      const bestMoveChance = difficulties[state.difficulty].bestMoveChance;
+
+      if (Math.random() < bestMoveChance) { 
         const { position } = minimax(state.board, 0, true);
         return position || availableMoves[Math.floor(Math.random() * availableMoves.length)];
       } else {
@@ -451,16 +463,6 @@ export function createTicTacToeEngine(
       }
     }
     
-    // For medium difficulty, make good moves with occasional mistakes
-    if (state.difficulty === 'medium') {
-      // 70% chance of making the best move, 30% chance of making a random move
-      if (Math.random() < 0.7) {
-        const { position } = minimax(state.board, 0, true);
-        return position || availableMoves[Math.floor(Math.random() * availableMoves.length)];
-      } else {
-        return availableMoves[Math.floor(Math.random() * availableMoves.length)];
-      }
-    }
     
     // For hard and unbeatable difficulties, always make the best move
     const { position } = minimax(state.board, 0, true);
